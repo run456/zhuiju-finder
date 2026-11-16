@@ -1,0 +1,15 @@
+{
+  "_说明": "site id -> 搜索URL模板，{q} 会被替换为 URL 编码后的片名。未列出的站点使用按分类生成的默认模板；所有站点在前端均提供『复制片名 + 打开站点』兜底。欢迎补充更精确的模板。",
+  "templates": {
+    "kuake-so-1": "https://pansou.de/?q={q}",
+    "zhuiju-us": "https://www.zhuiju.us/search?q={q}",
+    "gugeso": "https://gugeso.com/?q={q}",
+    "kuakeso": "https://kkso.net/?keyword={q}",
+    "acg-rip-10": "https://acg.rip/?term={q}",
+    "cilixiong": "https://www.cilixiong.org/s/{q}",
+    "ciligou": "https://ciligou.net/s/{q}",
+    "btshijiewang": "https://www.btsj6.com/s/{q}",
+    "juhebd": "https://www.juhebd.com/s/{q}",
+    "dianyinggang": "https://www.dyg22.com/s/{q}"
+  }
+}
