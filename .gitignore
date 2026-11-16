@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Docker 镜像导出包（57MB，不入库）
+*.tar.gz
+*.tar
+
+# data/resources.json 是启动兜底数据，需保留入库（网络不通时仍能启动）
+
+# IDE / 系统
+.vscode/
+.idea/
+.DS_Store
+*.log
