@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>磁力直链搜索</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <span class="brand-logo">🧲</span>
+        <div>
+          <h1>磁力直链搜索</h1>
+          <p>输入片名 → 选影片 → 直接列出真实磁力/网盘链接，一键复制</p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <a class="btn btn-ghost" href="/demo.html" target="_blank">操作演示</a>
+        <a class="btn btn-ghost" href="/api/docs" target="_blank">API</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="search-panel">
+      <div class="search-row">
+        <div class="search-box">
+          <span class="search-icon">⌕</span>
+          <input id="queryInput" type="text" autocomplete="off"
+                 placeholder="输入电影 / 剧集名称，回车搜索…" />
+          <button id="clearBtn" class="clear-btn" title="清空">×</button>
+        </div>
+        <button id="searchBtn" class="btn btn-primary">搜 索</button>
+      </div>
+      <div class="quick">
+        <span>试试：</span>
+        <span class="chip">奥德赛</span><span class="chip">狂飙</span>
+        <span class="chip">流浪地球</span><span class="chip">三体</span>
+      </div>
+      <p class="hint">数据来自 BD影视聚合（juhebd）等公开资源站，返回<strong>真实磁力链</strong>。链接有效性由第三方决定，本工具不托管任何文件。</p>
+    </section>
+
+    <!-- 第一步：影片列表 -->
+    <section id="filmSection" style="display:none">
+      <div class="section-head">
+        <h2>① 选择影片 <span id="filmCount" class="cnt"></span></h2>
+        <span class="section-tip">点一部影片，列出它的全部真实链接</span>
+      </div>
+      <div id="filmArea" class="film-grid"></div>
+    </section>
+
+    <!-- 第二步：资源链接列表 -->
+    <section id="resSection" style="display:none">
+      <div class="section-head">
+        <h2>② 真实资源链接 <span id="resCount" class="cnt"></span></h2>
+        <div class="res-toolbar">
+          <select id="typeFilter">
+            <option value="">全部类型</option>
+            <option value="magnet">仅磁力</option>
+            <option value="quark">仅夸克网盘</option>
+          </select>
+          <button id="copyAllBtn" class="btn btn-sm btn-copy">复制全部</button>
+          <button id="backBtn" class="btn btn-sm btn-home">← 换一部</button>
+        </div>
+      </div>
+      <div id="resArea" class="link-list"></div>
+    </section>
+
+    <section id="emptyState">
+      <div class="empty"><div class="big">🧲</div>
+        <div>输入片名开始搜索真实磁力链接</div></div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <footer class="wrap footer">
+    <p>本工具仅做链接<strong>索引与展示</strong>，不托管影视文件、破解软件或作品内容，不对第三方链接的合法性、有效性、安全性作保证。请遵守所在地法律并自行判断风险。</p>
+    <p>资源站索引参考 <a href="https://github.com/laoma528/awesome-zhuiju-free" target="_blank">awesome-zhuiju-free</a></p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
