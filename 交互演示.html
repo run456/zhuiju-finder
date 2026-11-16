@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>追剧资源一站搜 · 交互演示</title>
+<style>
+:root{
+  --blue:#2f6bff; --blue-d:#1f4fd6; --blue-l:#eaf1ff;
+  --bg:#f3f7ff; --card:#fff; --ink:#1f2733; --muted:#6b7688;
+  --line:#dfe8ff; --green:#17a673; --amber:#d98a00; --red:#d94a4a;
+  --shadow:0 4px 18px rgba(47,107,255,.10);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:15px;line-height:1.7}
+a{color:var(--blue);text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+.hero{background:linear-gradient(135deg,#2f6bff,#1f4fd6);color:#fff;padding:44px 0 40px}
+.hero .wrap{display:flex;align-items:center;gap:18px}
+.hero-logo{width:60px;height:60px;border-radius:16px;background:rgba(255,255,255,.16);
+  display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.hero h1{margin:0;font-size:27px}
+.hero p{margin:6px 0 0;opacity:.9;font-size:14px}
+.tagline{display:inline-block;margin-top:14px;background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:5px 15px;font-size:12.5px}
+
+.section{margin:34px 0}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.sec-num{width:34px;height:34px;border-radius:10px;background:var(--blue);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.sec-head h2{margin:0;font-size:20px}
+.sec-head p{margin:2px 0 0;color:var(--muted);font-size:13px;font-weight:400}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:24px;box-shadow:var(--shadow)}
+
+/* 架构图 */
+.arch{display:flex;align-items:stretch;gap:12px;flex-wrap:wrap;justify-content:center}
+.arch-group{border:2px dashed #b9ccff;border-radius:16px;padding:14px;background:#f7faff;flex:1;min-width:200px}
+.arch-group h4{margin:0 0 10px;font-size:12px;color:var(--blue);text-align:center;letter-spacing:1px}
+.node{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+  margin-bottom:8px;box-shadow:0 2px 6px rgba(31,45,80,.05);font-size:13px}
+.node b{display:block;color:var(--ink);font-size:13.5px}
+.node span{color:var(--muted);font-size:11.5px}
+.node.hl{background:var(--blue);color:#fff;border-color:var(--blue)}
+.node.hl b{color:#fff}.node.hl span{color:rgba(255,255,255,.8)}
+.arrow{display:flex;align-items:center;color:var(--blue);font-size:22px;font-weight:700}
+
+/* 交互控制台 */
+.console{background:linear-gradient(180deg,#fbfcff,#fff)}
+.search-row{display:flex;gap:10px;flex-wrap:wrap}
+.search-box{flex:1;min-width:240px;display:flex;align-items:center;gap:8px;
+  border:1.5px solid var(--line);border-radius:11px;padding:0 14px;background:#fbfcfe;transition:.15s}
+.search-box:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,107,255,.12);background:#fff}
+.search-box input{flex:1;border:none;outline:none;background:transparent;font-size:16px;padding:13px 0;color:var(--ink)}
+.btn{border:none;border-radius:10px;padding:12px 22px;font-size:14px;font-weight:600;
+  cursor:pointer;transition:.15s;font-family:inherit}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-d)}
+.btn:active{transform:translateY(1px)}
+.quick{margin-top:12px;color:var(--muted);font-size:12.5px}
+.quick b{color:var(--ink)}
+.chip{display:inline-block;background:var(--blue-l);color:var(--blue);border-radius:14px;
+  padding:3px 11px;margin:0 5px 5px 0;font-size:12px;cursor:pointer;border:1px solid var(--line)}
+.chip:hover{background:var(--blue);color:#fff}
+
+.tabs{display:flex;gap:7px;margin:20px 0 14px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:20px;
+  padding:6px 16px;font-size:13px;cursor:pointer;transition:.15s}
+.tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.meta{font-size:12.5px;color:var(--muted);margin-bottom:14px}
+.meta b{color:var(--blue)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.cat-title{grid-column:1/-1;font-size:16px;font-weight:700;margin:8px 0 2px;
+  display:flex;align-items:center;gap:8px}
+.cat-title .cnt{background:var(--blue-l);color:var(--blue);border-radius:12px;padding:1px 9px;font-size:12px}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff;
+  box-shadow:0 2px 8px rgba(31,45,80,.04);transition:.15s;display:flex;flex-direction:column;gap:8px}
+.card:hover{border-color:#b9ccff;box-shadow:0 6px 18px rgba(47,107,255,.12)}
+.card-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.card-name{font-weight:700;font-size:14.5px}
+.star{color:#f5a623;font-size:11.5px;letter-spacing:1px;margin-left:6px}
+.badge{font-size:10.5px;padding:1px 7px;border-radius:9px;font-weight:600;white-space:nowrap}
+.b-ok{background:#e6f7f0;color:var(--green)}
+.b-caution{background:#fff3dd;color:var(--amber)}
+.b-other{background:#eef0f4;color:#8a94a6}
+.card-sum{color:var(--muted);font-size:12px;min-height:18px}
+.card-btn{margin-top:auto;align-self:flex-start;background:var(--blue-l);color:var(--blue);
+  border:1px solid var(--line);border-radius:8px;padding:6px 13px;font-size:12.5px;font-weight:600;cursor:pointer}
+.card-btn:hover{background:var(--blue);color:#fff}
+
+/* 链接预览弹层 */
+.mask{position:fixed;inset:0;background:rgba(20,30,55,.5);display:none;
+  align-items:center;justify-content:center;z-index:99;padding:20px}
+.mask.show{display:flex}
+.modal{background:#fff;border-radius:16px;padding:28px;max-width:560px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal h3{margin:0 0 6px;font-size:19px}
+.modal p{color:var(--muted);font-size:13px;margin:0 0 16px}
+.urlbox{background:#f5f8ff;border:1px solid var(--line);border-radius:9px;padding:13px;
+  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:var(--blue-d);
+  word-break:break-all;line-height:1.6}
+.modal-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.btn-ghost{background:#eef2fb;color:#3a4a66}
+
+/* 技术真相 */
+.truth{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.truth{grid-template-columns:1fr}.arch{flex-direction:column}.arrow{transform:rotate(90deg)}}
+.fact{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px}
+.fact .em{font-size:13px;color:var(--green);font-weight:700}
+.fact h4{margin:8px 0;font-size:16px}
+.fact ul{margin:8px 0 0;padding-left:20px;color:var(--muted);font-size:13px}
+.fact li{margin:5px 0}
+.real-link{background:#f0fff8;border:1px solid #bfe8d5;border-radius:9px;padding:12px;
+  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:#0d7a55;word-break:break-all;margin-top:10px}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--blue-l);color:var(--blue-d)}
+td.yes{color:var(--green);font-weight:600}
+td.no{color:var(--red);font-weight:600}
+.note{background:#fff9e8;border:1px solid #ffe09a;border-radius:12px;padding:16px;
+  font-size:13px;color:#7a5b00;margin-top:16px}
+.steps{counter-reset:s;padding:0;margin:12px 0 0;list-style:none}
+.steps li{position:relative;padding:8px 0 8px 42px;font-size:13.5px;border-bottom:1px dashed var(--line)}
+.steps li:before{counter-increment:s;content:counter(s);position:absolute;left:0;top:7px;
+  width:28px;height:28px;background:var(--blue-l);color:var(--blue);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+code{background:#eef2fb;padding:2px 6px;border-radius:5px;font-size:12.5px;color:var(--blue-d)}
+.footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 0 50px}
+.empty{color:var(--muted);text-align:center;padding:40px}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="hero-logo">▶</div>
+  <div>
+    <h1>追剧资源一站搜 · 交互演示</h1>
+    <p>这是一个可以亲手操作的演示页 —— 不用装 Docker、不用懂代码，跟着点一遍就懂工具怎么用。</p>
+    <span class="tagline">✅ 本页面可离线打开 · 数据取自 awesome-zhuiju-free 真实站点</span>
+  </div>
+</div></div>
+
+<div class="wrap">
+
+  <!-- 1 原理 -->
+  <section class="section">
+    <div class="sec-head"><div class="sec-num">1</div><div>
+      <h2>先看懂原理：它到底做了什么</h2>
+      <p>一句话：它不存片源，只帮你"一次把片名丢进 74 个网站搜索"。</p>
+    </div></div>
+    <div class="panel">
+      <div class="arch">
+        <div class="arch-group">
+          <h4>数据源（别人的项目）</h4>
+          <div class="node"><b>awesome-zhuiju-free</b><span>GitHub 上的 128 个站点入口</span></div>
+          <div class="node"><b>每日自动同步</b><span>每 24 小时拉取一次</span></div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="arch-group">
+          <h4>本工具（就是这页演示的）</h4>
+          <div class="node hl"><b>本地站点库</b><span>网盘4 / 磁力16 / 影视54</span></div>
+          <div class="node hl"><b>你输入片名</b><span>例如"庆余年"</span></div>
+          <div class="node hl"><b>自动生成 74 条搜索链接</b><span>片名自动带进每个网站</span></div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="arch-group">
+          <h4>你得到的结果</h4>
+          <div class="node"><b>点一下就跳转</b><span>直达该站片的搜索结果页</span></div>
+          <div class="node"><b>状态 / 风险一目了然</b><span>先看哪个站靠谱</span></div>
+        </div>
+      </div>
+      <div class="note">💡 <b>关键理解：</b>这个工具是个"导航/聚合器"，不是"资源库"。它自己不存任何电影，也不直接吐出下载链接 —— 它把你的片名，变成 74 个网站各自能听懂的搜索地址，帮你省去一个个打开、输入、搜索的麻烦。</div>
+    </div>
+  </section>
+
+  <!-- 2 交互 -->
+  <section class="section">
+    <div class="sec-head"><div class="sec-num">2</div><div>
+      <h2>动手试一试：完整操作演示</h2>
+      <p>输入一个片名 → 看它生成哪些链接 → 点"去搜索"看会跳到哪里（会弹出真实网址预览）。</p>
+    </div></div>
+    <div class="panel console">
+      <div class="search-row">
+        <div class="search-box"><input id="q" value="庆余年" placeholder="输入电影 / 剧集名称…" /></div>
+        <button class="btn btn-primary" id="doSearch">搜索</button>
+      </div>
+      <div class="quick"><b>试试这些：</b>
+        <span class="chip">庆余年</span><span class="chip">流浪地球</span>
+        <span class="chip">狂飙</span><span class="chip">三体</span>
+      </div>
+      <div class="tabs" id="tabs"></div>
+      <div class="meta" id="meta"></div>
+      <div class="grid" id="grid"><div class="empty">点"搜索"开始演示</div></div>
+    </div>
+  </section>
+
+  <!-- 3 技术真相 -->
+  <section class="section">
+    <div class="sec-head"><div class="sec-num">3</div><div>
+      <h2>你问的"直接读出真实链接"—— 技术真相</h2>
+      <p>我做了实测，结论是：能，但代价很大。这里如实讲清楚。</p>
+    </div></div>
+    <div class="truth">
+      <div class="fact">
+        <div class="em">✅ 实测结论：能抓到</div>
+        <h4>我用浏览器实测了 PanSou 搜"庆余年"</h4>
+        <ul>
+          <li>页面用 Next.js 渲染，搜索走 <code>/api/v1/search/stream</code> 流式接口</li>
+          <li>结果藏在 <code>/res/{id}</code> 详情页里，要二次跳转</li>
+          <li>最终抓到了真实的夸克网盘链接 👇</li>
+        </ul>
+        <div class="real-link">https://pan.quark.cn/s/f27e456b9786</div>
+      </div>
+      <div class="fact">
+        <div class="em">⚠️ 但要覆盖全部 74 个站……</div>
+        <h4>每个站都得单独写一套爬虫</h4>
+        <ul>
+          <li>站点结构各不相同（有的动态渲染、有的 SSE 流式）</li>
+          <li>普遍有反爬、验证码、Cloudflare、登录限制</li>
+          <li>域名和接口三天两头变 → 爬虫频繁失效、要天天修</li>
+          <li>批量抓取并聚合盗版站链接，<b>合规风险明显更高</b></li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:16px">
+      <table>
+        <tr><th>对比</th><th>一键跳转（当前方案）</th><th>直接抓取真实链接</th></tr>
+        <tr><td>能否出真实下载链接</td><td class="no">否，需跳到对方站看</td><td class="yes">能</td></tr>
+        <tr><td>稳定性</td><td class="yes">高，站点在就能用</td><td class="no">低，反爬/改版即失效</td></tr>
+        <tr><td>维护成本</td><td class="yes">低，只同步站点清单</td><td class="no">高，74 套爬虫要天天修</td></tr>
+        <tr><td>合规风险</td><td class="yes">低，仅导航</td><td class="no">较高，批量聚合资源链接</td></tr>
+      </table>
+      <div class="note">🎯 <b>当前选择：</b>先用"一键跳转"方案——稳定、省维护、风险低。将来若你确实想要真实链接，可以只针对 <b>PanSou 这类有稳定接口的站</b>单独接一个抓取功能（作为补充，而不是全站硬抓），性能和合规都更可控。</div>
+    </div>
+  </section>
+
+  <!-- 4 真实工具用法 -->
+  <section class="section">
+    <div class="sec-head"><div class="sec-num">4</div><div>
+      <h2>真实工具怎么用（部署后）</h2>
+      <p>演示页看懂流程后，真正的工具是这样跑起来的。</p>
+    </div></div>
+    <div class="panel">
+      <ol class="steps">
+        <li>在项目目录执行 <code>docker compose up -d --build</code>，等镜像构建完成</li>
+        <li>浏览器打开 <code>http://服务器IP:8000</code>，就是和本演示页类似的界面</li>
+        <li>输入片名回车 → 三个分类（网盘 / 磁力 / 影视）一次性列出所有站点</li>
+        <li>看徽章挑站点：<b>绿色</b>=状态正常、<b>黄色</b>=需注意、风险标"低"的优先点</li>
+        <li>点"去搜索"→ 在新标签页打开该站已填好片名的搜索结果</li>
+        <li>若某站模板失效 → 点"复制片名"，再点"站点主页"进去手动粘贴</li>
+        <li>想更新站点数据 → 点右上角"刷新数据源"，或等它每 24 小时自动更新</li>
+      </ol>
+      <div class="note">📌 站点搜索页地址可能随对方改版变化，精确模板都集中在 <code>data/search_templates.json</code>，发现失效改一下即可（挂了 volume 的话改完就生效）。</div>
+    </div>
+  </section>
+
+  <div class="footer">本演示仅作资源索引与导航说明，不托管任何影视文件 / 破解软件 / 作品链接 · 数据来自 laoma528/awesome-zhuiju-free（CC BY 4.0）</div>
+</div>
+
+<!-- 链接预览弹层 -->
+<div class="mask" id="mask"><div class="modal">
+  <h3 id="mTitle">即将打开搜索页</h3>
+  <p>工具已经把片名自动填进了这个网站的搜索地址，点确认即可在新标签打开：</p>
+  <div class="urlbox" id="mUrl"></div>
+  <div class="modal-actions">
+    <button class="btn btn-primary" id="mOpen">确认打开 ↗</button>
+    <button class="btn btn-ghost" id="mCopy">复制链接</button>
+    <button class="btn btn-ghost" id="mClose">取消</button>
+  </div>
+</div></div>
+
+<script>
+const DATA = {"sites": [{"id": "kuake-so-1", "cat": "cloud_search", "name": "PanSou", "url": "https://pansou.de", "summary": "纯净的夸克网盘资源搜索引擎", "status": "caution", "star": 5}, {"id": "kuakeso", "cat": "cloud_search", "name": "KK网盘搜", "url": "https://kkso.net", "summary": "夸克百度网盘搜索", "status": "caution", "star": 5}, {"id": "zhuiju-us", "cat": "cloud_search", "name": "追剧吧", "url": "https://www.zhuiju.us/", "summary": "国内外热门影视网盘资源搜索", "status": "caution", "star": 5}, {"id": "gugeso", "cat": "cloud_search", "name": "谷哥搜", "url": "https://gugeso.com/", "summary": "支持9种网盘的综合搜索站", "status": "caution", "star": 5}, {"id": "juhebd", "cat": "magnet_search", "name": "BD影视聚合", "url": "https://www.juhebd.com/", "summary": "最新高清电影电视剧下载", "status": "caution", "star": 5}, {"id": "ainunu", "cat": "magnet_search", "name": "爱努努", "url": "https://video.ainunu.com/", "summary": "绿色影视下载", "status": "caution", "star": 4}, {"id": "bdflixs", "cat": "magnet_search", "name": "BD电影首发", "url": "https://www.bdflixs.com/", "summary": "4K蓝光高清电影更新", "status": "caution", "star": 5}, {"id": "ldysg", "cat": "magnet_search", "name": "找电影时光", "url": "https://www.ldysg.win/", "summary": "影视高清晰无水印下载", "status": "caution", "star": 5}, {"id": "meijufen", "cat": "magnet_search", "name": "美剧粉", "url": "https://www.mjf2020.com", "summary": "全部高清无广告", "status": "caution", "star": 5}, {"id": "cilixiong", "cat": "magnet_search", "name": "磁力熊", "url": "https://www.cilixiong.org", "summary": "无删减、无广告", "status": "caution", "star": 5}, {"id": "ciligou", "cat": "magnet_search", "name": "磁力狗", "url": "https://ciligou.net", "summary": "干净好用的磁力资源搜索", "status": "caution", "star": 3}, {"id": "cilidi", "cat": "magnet_search", "name": "磁力帝", "url": "https://www.cld123.com", "summary": "地址发布页cldi.top", "status": "caution", "star": 5}, {"id": "bt-yingshi", "cat": "magnet_search", "name": "BT影视", "url": "https://www.btbtla.com", "summary": "4k高清电影BT下载", "status": "caution", "star": 5}, {"id": "4k-yuanpan", "cat": "magnet_search", "name": "POMO", "url": "https://pomo.mom/", "summary": "4K原盘免费下载", "status": "caution", "star": 5}, {"id": "dianyinggang", "cat": "magnet_search", "name": "电影港网", "url": "https://www.dyg22.com", "summary": "无水印4K高清BT种子资源", "status": "caution", "star": 4}, {"id": "btshijiewang", "cat": "magnet_search", "name": "BT世界网", "url": "https://www.btsj6.com", "summary": "高清电影美剧BT种子迅雷下载", "status": "caution", "star": 5}, {"id": "gaoqing-mp4", "cat": "magnet_search", "name": "高清MP4", "url": "https://www.mp4ba.vip", "summary": "免费1080电影4K电影", "status": "caution", "star": 4}, {"id": "gaoqingzu", "cat": "magnet_search", "name": "高清族", "url": "https://hdzu.org", "summary": "1080P电影下载,4K电影下载", "status": "caution", "star": 3}, {"id": "sidhub-cc-7", "cat": "magnet_search", "name": "SeedHub", "url": "https://sidhub.cc/", "summary": "影视&动漫分享，页面纯净、无广告", "status": "caution", "star": 5}, {"id": "acg-rip-10", "cat": "magnet_search", "name": "ACG.RIP", "url": "https://acg.rip/", "summary": "磁力为主的动漫、OST发布，无广", "status": "caution", "star": 4}, {"id": "kankanya", "cat": "online_video", "name": "看看鸭", "url": "https://www.kankanya.me/", "summary": "高清无广告新站", "status": "caution", "star": 5}, {"id": "no-video", "cat": "online_video", "name": "No影视", "url": "https://novipnoad.org/", "summary": "海外影视剧资源聚合站（需梯子）", "status": "caution", "star": 4}, {"id": "gaze-red", "cat": "online_video", "name": "注视影视", "url": "https://gaze.red/", "summary": "国内海外影视剧资源（需梯子）", "status": "caution", "star": 5}, {"id": "sotvla", "cat": "online_video", "name": "搜TV啦", "url": "https://www.sotvla.cc/", "summary": "国内海外高清影视剧资源", "status": "caution", "star": 4}, {"id": "xlys", "cat": "online_video", "name": "雪落影视", "url": "https://xlys.me/", "summary": "国内海外影视剧资源（需梯子）", "status": "removed", "star": 4}, {"id": "duonao-video", "cat": "online_video", "name": "多瑙影视", "url": "https://www.duonaovod.com", "summary": "海外华人在线影院（需梯子）", "status": "removed", "star": 5}, {"id": "tdgo", "cat": "online_video", "name": "白嫖者联盟", "url": "https://www.tdgo.shop", "summary": "热门热播剧，无广告速度快（需梯子）", "status": "caution", "star": 5}, {"id": "ddmf", "cat": "online_video", "name": "蛋蛋魔法", "url": "https://ddmf.net", "summary": "国内外热播剧，有福利伦理片（需梯子）", "status": "caution", "star": 5}, {"id": "appmovie", "cat": "online_video", "name": "APP影院", "url": "https://www.appmovie.art", "summary": "国内外热播剧，纯净无广告", "status": "caution", "star": 5}, {"id": "ai-movie", "cat": "online_video", "name": "爱电影", "url": "https://kuhh4jo.com", "summary": "最新热门电影/电视剧（需梯子）", "status": "caution", "star": 5}, {"id": "jpyy", "cat": "online_video", "name": "金牌影视", "url": "https://www.vv3nwjk.com", "summary": "全网VIP资源（可访问需梯子）", "status": "removed", "star": 5}, {"id": "tv-937", "cat": "online_video", "name": "937影视", "url": "https://www.937tv.vip", "summary": "看全网影视剧（需梯子）", "status": "caution", "star": 5}, {"id": "iyf", "cat": "online_video", "name": "爱壹帆", "url": "https://iyf.tv", "summary": "海外华人影视站（需梯子/有VIP限制）", "status": "caution", "star": 4}, {"id": "czzymovie", "cat": "online_video", "name": "厂长资源", "url": "https://www.czzymovie.com", "summary": "高清、秒播不卡顿，有广告", "status": "caution", "star": 3}, {"id": "libvio", "cat": "online_video", "name": "LIBVIO", "url": "https://libviobd.com", "summary": "海外影视的老牌网站，发布页www.libvio.app", "status": "caution", "star": 4}, {"id": "auete-video", "cat": "online_video", "name": "Auete影视", "url": "https://www.aeete.com", "summary": "蓝光超清精品影视，发布页auete.pro", "status": "caution", "star": 5}, {"id": "dyrs", "cat": "online_video", "name": "电影人生", "url": "https://dyrs.tv", "summary": "高清电影在线观看", "status": "caution", "star": 5}, {"id": "netflixgc", "cat": "online_video", "name": "奈飞工厂", "url": "https://www.netflixgc.com", "summary": "最新美剧，无广告（需梯子）", "status": "caution", "star": 5}, {"id": "nfyingshi", "cat": "online_video", "name": "奈菲影视", "url": "https://www.nfyingshi.com", "summary": "热门美剧（需梯子/有VIP限制）", "status": "caution", "star": 3}, {"id": "nivod", "cat": "online_video", "name": "泥视频", "url": "https://www.nivod.vip", "summary": "热门国剧，更新快，无广告", "status": "removed", "star": 5}, {"id": "ppnix", "cat": "online_video", "name": "PPnix", "url": "https://www.ppnix.com/cn/", "summary": "在线观看电影电视剧", "status": "caution", "star": 5}, {"id": "dbku", "cat": "online_video", "name": "独播库", "url": "https://www.dbku.tv", "summary": "页面无广告，纯净", "status": "caution", "star": 4}, {"id": "bubu-zhuiju", "cat": "online_video", "name": "布布追剧", "url": "https://bubuzhuiju.com", "summary": "速度快，有广告能接受", "status": "caution", "star": 4}, {"id": "yingmao-cangku", "cat": "online_video", "name": "影猫仓库", "url": "https://www.ymck.pro", "summary": "热门影视剧，有广告能接受", "status": "caution", "star": 4}, {"id": "aikanbot", "cat": "online_video", "name": "爱看机器人", "url": "https://www1.aikanbot.com", "summary": "热门电影电视剧（有跳转广告）", "status": "caution", "star": 3}, {"id": "duse91", "cat": "online_video", "name": "91毒舌", "url": "https://www.duse0.com/", "summary": "最新Netflix新剧、4K高清（可访问）", "status": "caution", "star": 5}, {"id": "guangsu-yingshi", "cat": "online_video", "name": "光速影视", "url": "https://www.yingshiso.link/", "summary": "作为备选，纯净无广告", "status": "removed", "star": 4}, {"id": "haohaokan", "cat": "online_video", "name": "好好看", "url": "https://www.hhkan2.com/", "summary": "4K高清Netflix新剧（可访问需梯子）", "status": "caution", "star": 5}, {"id": "ifn", "cat": "online_video", "name": "IFN", "url": "https://ifn.watch/register?code=8B1EF6", "summary": "为数不多的真4K，部分免费", "status": "removed", "star": 5}, {"id": "4kvm-cc-18", "cat": "online_video", "name": "4k影视", "url": "https://www.4kvm.cc/", "summary": "有广告能接受（需梯子/VIP限制）", "status": "caution", "star": 3}, {"id": "fdzys", "cat": "online_video", "name": "饭搭子影视", "url": "https://fdzys.com", "summary": "最新热门电影电视剧动漫综艺", "status": "caution", "star": 5}, {"id": "sa-video", "cat": "online_video", "name": "SA视频", "url": "https://www.lsjys11.com/", "summary": "最新电影电视剧动漫综艺（可访问）", "status": "caution", "star": 5}, {"id": "naifei-fyi-19", "cat": "online_video", "name": "奈飞工厂", "url": "https://naifei.fyi/", "summary": "国区可访问，资源无广", "status": "caution", "star": 4}, {"id": "juok", "cat": "online_video", "name": "剧OK", "url": "https://juok3.top/", "summary": "最新电视剧、最新电影", "status": "caution", "star": 5}, {"id": "dandanqi", "cat": "online_video", "name": "蛋蛋奇", "url": "https://www.dandanqi.cc/", "summary": "最新电视剧/电影/无广告", "status": "removed", "star": 5}, {"id": "zndy", "cat": "online_video", "name": "宅男影视", "url": "https://zndy.top/", "summary": "想看就看", "status": "caution", "star": 4}, {"id": "yingshidaquan", "cat": "online_video", "name": "影视大全", "url": "https://yingshidaquan.top/", "summary": "在线搜索播放、官解无广", "status": "removed", "star": 5}, {"id": "juzong", "cat": "online_video", "name": "剧踪影院", "url": "https://www.juzong01.me/", "summary": "海内外 SVIP 超前更新", "status": "caution", "star": 5}, {"id": "jianyunys", "cat": "online_video", "name": "简云影视", "url": "https://jianyunys.com/", "summary": "纯净无广告/1080P高清秒播", "status": "caution", "star": 5}, {"id": "pianku", "cat": "online_video", "name": "片库", "url": "https://4k01.pianku.online/", "summary": "纯净无广告/1080P高清秒播", "status": "caution", "star": 5}, {"id": "66-dapianwang", "cat": "online_video", "name": "66 大片网", "url": "https://www.77dpw.vip/", "summary": "免费电影在线观看", "status": "caution", "star": 5}, {"id": "didahd", "cat": "online_video", "name": "嘀嗒影视", "url": "https://www.didahd.xyz/", "summary": "高分电影聚集地，超清秒播", "status": "caution", "star": 5}, {"id": "zhuiying", "cat": "online_video", "name": "追影", "url": "https://zhuiying3.cc/", "summary": "蓝光高清、无广告免费在线秒播", "status": "caution", "star": 5}, {"id": "wbbb", "cat": "online_video", "name": "歪比巴卜", "url": "https://wbbb1.com/", "summary": "高清视频免费在线观看（可访问）", "status": "caution", "star": 5}, {"id": "kxyy", "cat": "online_video", "name": "开心影院", "url": "https://www.kxyy1.cc/", "summary": "最新电影热播电视剧", "status": "caution", "star": 5}, {"id": "dhvideo", "cat": "online_video", "name": "豆花电影网", "url": "https://dhvideo.cc/", "summary": "最新免费电影_在线观看", "status": "caution", "star": 5}, {"id": "zip0", "cat": "online_video", "name": "ZIP0", "url": "https://zip0.com/?r=KBDIG8", "summary": "在线影视搜索与播放", "status": "caution", "star": 5}, {"id": "aipan-me-25", "cat": "online_video", "name": "爱盼", "url": "https://www.aipan.me/", "summary": "4K影视资源聚合站", "status": "caution", "star": 4}, {"id": "103-39-111-180-29", "cat": "online_video", "name": "可可影视", "url": "https://www.kkys14.com/", "summary": "最新Netflix新剧（可访问）", "status": "caution", "star": 5}, {"id": "skr-skr1-cc-9", "cat": "online_video", "name": "樱之空", "url": "https://skr.skr1.cc:666/", "summary": "国内外各种动漫都比较齐全", "status": "caution", "star": 4}, {"id": "tv-lxyy-club-36", "cat": "online_video", "name": "洛雪TV", "url": "https://tv.lxyy.club/", "summary": "4K无广告（@anyongki贡献）", "status": "caution", "star": 5}, {"id": "kanmovie-com-34", "cat": "online_video", "name": "西瓜影视", "url": "https://www.kanmovie.com/", "summary": "没有搜不到的资源（@miaodongsu7贡献）", "status": "caution", "star": 5}, {"id": "ys-cxkjg-cn-39", "cat": "online_video", "name": "创享影视", "url": "https://ys.cxkjg.cn/", "summary": "无广告三网高峰秒播（@zxaay贡献）", "status": "caution", "star": 5}, {"id": "yingxivod-com-53", "cat": "online_video", "name": "影夕视频", "url": "https://yingxivod.com/", "summary": "高清免费在线影视，每日更新", "status": "caution", "star": 4}], "templates": {"kuake-so-1": "https://pansou.de/?q={q}", "zhuiju-us": "https://www.zhuiju.us/search?q={q}", "gugeso": "https://gugeso.com/?q={q}", "kuakeso": "https://kkso.net/?keyword={q}", "acg-rip-10": "https://acg.rip/?term={q}", "cilixiong": "https://www.cilixiong.org/s/{q}", "ciligou": "https://ciligou.net/s/{q}", "btshijiewang": "https://www.btsj6.com/s/{q}", "juhebd": "https://www.juhebd.com/s/{q}", "dianyinggang": "https://www.dyg22.com/s/{q}"}, "labels": {"cloud_search": "网盘搜索", "magnet_search": "磁力 / BT", "online_video": "在线影视"}};
+const CAT_ORDER = ["cloud_search","magnet_search","online_video"];
+let curCat = "", curQ = "", pendingUrl = "";
+
+function statusBadge(s){
+  if(s==="ok"||s==="normal") return '<span class="badge b-ok">正常收录</span>';
+  if(s==="caution") return '<span class="badge b-caution">需注意</span>';
+  return '<span class="badge b-other">'+({removed:'已下架',unknown:'未检测'}[s]||'未知')+'</span>';
+}
+function buildUrl(site, q){
+  const base=(site.url||"").replace(/\/$/,"");
+  const tpl=DATA.templates[site.id] || ({cloud_search:"{base}?q={q}",magnet_search:"{base}?q={q}",online_video:"{base}/search?q={q}"}[site.cat]||"{base}?q={q}");
+  return tpl.replace("{base}",base).replace("{q}",encodeURIComponent(q));
+}
+function renderTabs(){
+  const box=document.getElementById("tabs");
+  box.innerHTML="";
+  const mk=(key,label)=>{
+    const b=document.createElement("button");
+    b.className="tab"+(curCat===key?" active":"");
+    b.textContent=label;
+    b.onclick=()=>{curCat=key;renderTabs();render();};
+    box.appendChild(b);
+  };
+  mk("","全部");
+  CAT_ORDER.forEach(c=>mk(c,DATA.labels[c]));
+}
+function render(){
+  const grid=document.getElementById("grid");
+  const q=curQ.trim();
+  let list=DATA.sites.filter(s=>!curCat||s.cat===curCat);
+  document.getElementById("meta").innerHTML="片名「<b>"+(q||"—")+"</b>」· 共匹配 <b>"+list.length+"</b> 个站点 · 生成 <b>"+list.length+"</b> 条搜索链接";
+  if(!list.length){grid.innerHTML='<div class="empty">没有站点</div>';return;}
+  let html="";
+  CAT_ORDER.forEach(c=>{
+    if(curCat&&curCat!==c) return;
+    const items=list.filter(s=>s.cat===c);
+    if(!items.length) return;
+    html+='<div class="cat-title">'+DATA.labels[c]+'<span class="cnt">'+items.length+'</span></div>';
+    items.forEach(s=>{
+      const url=buildUrl(s,q);
+      html+='<div class="card"><div class="card-top"><div class="card-name">'+s.name+
+        '<span class="star">'+("★".repeat(s.star)+"☆".repeat(Math.max(0,5-s.star)))+'</span></div>'+
+        statusBadge(s.status)+'</div>'+
+        '<div class="card-sum">'+(s.summary||"—")+'</div>'+
+        '<button class="card-btn" data-url="'+encodeURIComponent(url)+'" data-name="'+s.name+'">去搜索 →</button></div>';
+    });
+  });
+  grid.innerHTML=html;
+  grid.querySelectorAll(".card-btn").forEach(b=>{
+    b.onclick=()=>showModal(decodeURIComponent(b.dataset.url),b.dataset.name);
+  });
+}
+function showModal(url,name){
+  pendingUrl=url;
+  document.getElementById("mTitle").textContent="即将打开 ["+name+"] 的搜索页";
+  document.getElementById("mUrl").textContent=url;
+  document.getElementById("mask").classList.add("show");
+}
+document.getElementById("doSearch").onclick=()=>{curQ=document.getElementById("q").value;render();};
+document.getElementById("q").addEventListener("keydown",e=>{if(e.key==="Enter"){curQ=e.target.value;render();}});
+document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{
+  document.getElementById("q").value=c.textContent;curQ=c.textContent;render();
+});
+document.getElementById("mOpen").onclick=()=>{window.open(pendingUrl,"_blank","noopener");closeModal();};
+document.getElementById("mCopy").onclick=async()=>{
+  try{await navigator.clipboard.writeText(pendingUrl);alert("链接已复制");}
+  catch(e){alert("复制失败，请手动选择");}
+};
+document.getElementById("mClose").onclick=closeModal;
+document.getElementById("mask").onclick=e=>{if(e.target.id==="mask")closeModal();};
+function closeModal(){document.getElementById("mask").classList.remove("show");}
+renderTabs();
+curQ=document.getElementById("q").value;
+render();
+</script>
+</body>
+</html>
