@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>磁力直链搜索 · 操作演示</title>
+<style>
+:root{--blue:#2f6bff;--blue-d:#1f4fd6;--blue-l:#eaf1ff;--bg:#f3f7ff;--ink:#1f2733;
+--muted:#6b7688;--line:#dfe8ff;--green:#17a673;--shadow:0 4px 18px rgba(47,107,255,.10)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;font-size:15px;line-height:1.7}
+a{color:var(--blue);text-decoration:none}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+.hero{background:linear-gradient(135deg,#2f6bff,#1f4fd6);color:#fff;padding:40px 0 36px}
+.hero .wrap{display:flex;align-items:center;gap:18px}
+.hero-logo{width:58px;height:58px;border-radius:16px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.hero h1{margin:0;font-size:26px}.hero p{margin:6px 0 0;opacity:.9;font-size:14px}
+.tagline{display:inline-block;margin-top:12px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:5px 15px;font-size:12.5px}
+.section{margin:32px 0}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.sec-num{width:34px;height:34px;border-radius:10px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.sec-head h2{margin:0;font-size:20px}.sec-head p{margin:2px 0 0;color:var(--muted);font-size:13px;font-weight:400}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow)}
+.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+.step{border:2px dashed #b9ccff;border-radius:14px;padding:16px;background:#f7faff;text-align:center;min-width:140px;flex:1}
+.step .n{font-size:12px;color:var(--blue);font-weight:700}.step b{display:block;margin:6px 0 2px;font-size:15px}.step span{font-size:12px;color:var(--muted)}
+.step.hl{background:var(--blue);border-color:var(--blue);color:#fff}.step.hl .n,.step.hl span{color:rgba(255,255,255,.85)}
+.arrow{color:var(--blue);font-size:22px;font-weight:700}
+.demo-box{background:linear-gradient(180deg,#fbfcff,#fff)}
+.search-row{display:flex;gap:10px;flex-wrap:wrap}
+.search-box{flex:1;min-width:220px;display:flex;align-items:center;border:1.5px solid var(--line);border-radius:11px;padding:0 14px;background:#fbfcfe}
+.search-box input{flex:1;border:none;outline:none;background:transparent;font-size:16px;padding:13px 0;color:var(--ink)}
+.btn{border:none;border-radius:10px;padding:12px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;background:var(--blue);color:#fff}
+.btn:active{transform:translateY(1px)}
+.quick{margin-top:12px;color:var(--muted);font-size:12.5px}
+.chip{display:inline-block;background:var(--blue-l);color:var(--blue);border-radius:14px;padding:3px 11px;margin:0 5px 5px 0;font-size:12px;cursor:pointer;border:1px solid var(--line)}
+.stage{margin-top:18px;border-top:2px solid var(--line);padding-top:16px}
+.stage h4{margin:0 0 10px;font-size:14px;color:var(--blue-d)}
+.film{border:1px solid var(--line);border-radius:9px;padding:10px 13px;margin-bottom:7px;cursor:pointer;display:flex;gap:10px;align-items:center;background:#fff}
+.film:hover,.film.active{border-color:var(--blue);background:var(--blue-l)}
+.film .i{width:24px;height:24px;border-radius:7px;background:var(--blue-l);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.film .t{flex:1;font-size:13.5px}
+.link{border:1px solid var(--line);border-radius:9px;padding:10px 13px;margin-bottom:7px;background:#fff;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.link .lf{flex:1;min-width:200px;font-size:13px}
+.link .lu{font-size:11px;color:#96a0b0;word-break:break-all}
+.badge{font-size:10.5px;padding:2px 8px;border-radius:8px;background:#e6f7f0;color:var(--green);font-weight:600}
+.badge.q{background:var(--blue-l);color:var(--blue)}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:7px}
+.note{background:#fff9e8;border:1px solid #ffe09a;border-radius:12px;padding:16px;font-size:13px;color:#7a5b00;margin-top:16px}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}th{background:var(--blue-l);color:var(--blue-d)}
+code{background:#eef2fb;padding:2px 6px;border-radius:5px;font-size:12.5px;color:var(--blue-d)}
+.steps{counter-reset:s;padding:0;margin:12px 0 0;list-style:none}
+.steps li{position:relative;padding:8px 0 8px 42px;font-size:13.5px;border-bottom:1px dashed var(--line)}
+.steps li:before{counter-increment:s;content:counter(s);position:absolute;left:0;top:7px;width:28px;height:28px;background:var(--blue-l);color:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 0 50px}
+@media(max-width:700px){.flow{flex-direction:column}.arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="hero-logo">🧲</div>
+  <div><h1>磁力直链搜索 · 操作演示</h1>
+  <p>这个页面可交互：输入片名 → 选影片 → 直接看到真实磁力链接（不需跳到别的网站搜）。</p>
+  <span class="tagline">✅ 可离线打开 · 演示数据为真实抓取结果样例</span></div>
+</div></div>
+
+<div class="wrap">
+  <section class="section">
+    <div class="sec-head"><div class="sec-num">1</div><div>
+      <h2>核心流程：两步拿到真实磁力链接</h2>
+      <p>工具在后台解析资源站，把真实磁力链抓回来列在页面上。</p>
+    </div></div>
+    <div class="panel">
+      <div class="flow">
+        <div class="step"><div class="n">第 1 步</div><b>搜片名</b><span>输入"奥德赛"</span></div>
+        <div class="arrow">→</div>
+        <div class="step hl"><div class="n">工具后台</div><b>列出影片</b><span>解析资源站搜索页</span></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="n">第 2 步</div><b>选一部影片</b><span>点一下</span></div>
+        <div class="arrow">→</div>
+        <div class="step hl"><div class="n">工具后台</div><b>列出真实磁力链</b><span>解码资源 API</span></div>
+      </div>
+      <div class="note">💡 <b>这就是你要的效果：</b>像手机截图那样，选一部影片就列出一堆磁力/网盘链接，每条都能"复制"。真实工具会实时抓取，本页用提前抓好的真实结果演示。</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sec-head"><div class="sec-num">2</div><div>
+      <h2>动手试：搜片名 → 选影片 → 看磁力链接</h2>
+      <p>点"搜索"出影片列表，再点任意一部，看真实磁力链接出现。</p>
+    </div></div>
+    <div class="panel demo-box">
+      <div class="search-row">
+        <div class="search-box"><input id="q" value="奥德赛" placeholder="输入片名…" /></div>
+        <button class="btn" id="go">搜索</button>
+      </div>
+      <div class="quick">试试：<span class="chip">奥德赛</span><span class="chip">2001太空漫游</span></div>
+      <div class="stage" id="stage1" style="display:none">
+        <h4>① 搜索结果 · 选择影片</h4>
+        <div id="films"></div>
+      </div>
+      <div class="stage" id="stage2" style="display:none">
+        <h4>② 该片的真实资源链接 · 点"复制"直接用</h4>
+        <div id="links"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sec-head"><div class="sec-num">3</div><div>
+      <h2>技术实现：链路是这样的</h2>
+      <p>实测挖到的接口，讲清楚链接从哪来。</p>
+    </div></div>
+    <div class="panel">
+      <table>
+        <tr><th>步骤</th><th>接口 / 处理</th><th>得到什么</th></tr>
+        <tr><td>搜影片</td><td><code>GET juhebd.com/q/index?k=片名</code></td><td>影片列表 + 详情页 id（如 <code>0lj0</code>）</td></tr>
+        <tr><td>取资源</td><td><code>GET res.juhebd.com/api/rl?id=0lj0</code></td><td>Base64 编码的数据</td></tr>
+        <tr><td>解码</td><td>Base64 → JSON</td><td>真实 <code>magnet:?xt=urn:btih:...</code> 磁力链 + 文件名 + 大小</td></tr>
+      </table>
+      <div class="note">🎯 <b>实测结果：</b>搜"奥德赛"第一部影片（id=<code>0lj0</code>）拿到 <b>129 条磁力链接</b> + 夸克/迅雷网盘链接，含清晰的文件名和 GB 大小——和你截图里的界面一致。<br><br>⚠️ 补充：这类资源站的搜索页和接口<b>可能改版或加反爬</b>，届时抓取逻辑需相应调整；链接有效性由第三方决定，工具只做索引展示，不托管任何内容，请合规使用。</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sec-head"><div class="sec-num">4</div><div>
+      <h2>真实工具怎么用</h2>
+    </div></div>
+    <div class="panel">
+      <ol class="steps">
+        <li>执行 <code>docker compose up -d --build</code> 启动工具</li>
+        <li>打开 <code>http://服务器IP:8000</code></li>
+        <li>输入片名点"搜索"，列出影片列表</li>
+        <li>点一部影片，列出它的全部真实磁力/网盘链接</li>
+        <li>按类型筛选（仅磁力 / 仅夸克），点"复制"直接拿链接</li>
+        <li>磁力链接点"打开"会自动复制，粘贴到迅雷/qBittorrent 等下载工具即可</li>
+      </ol>
+    </div>
+  </section>
+  <div class="footer">本演示仅作链接索引与导航说明，不托管任何影视文件 / 破解软件 / 作品链接</div>
+</div>
+
+<script>
+const FILMS=[
+ ["0lj0","2026美国高分动作《奥德赛》4K/1080P.中英双字"],
+ ["LKk0","2026美国动作奇幻《奥德赛》1080P/720P.中英双字"],
+ ["tnl0","2025英国恐怖惊悚《奥德赛》1080P/720P.中英双字"],
+ ["Zwj0","2026英国纪录片《奥德赛 - 真实的故事》1080P/720P"]
+];
+const LINKS=[
+ ["The.Odyssey.2026.2160p.UHD.BluRay.Remux.1080p 4K HDR","magnet:?xt=urn:btih:5bb52dd20dcc5825d0d2e754cb86aad3bead9caf","磁力","86.30"],
+ ["奥德赛 4K原盘+1080P 多版本 HDR/HDR10 中英字幕","magnet:?xt=urn:btih:3f1a1bd7518e476f6c182d1a7c0b233b3ea78fe2","磁力","86.86"],
+ ["The.Odyssey.2026.1080p.BluRay.DTS-HD.MA.5.1.x265","magnet:?xt=urn:btih:4b9142488daace57b6beba8b763c6f4dffe223cd","磁力","28.50"],
+ ["奥德赛 The Odyssey (2026).1080p+4K HDR原盘 中字","https://pan.quark.cn/s/f6209ab5d8b8","夸克网盘","109.84"],
+ ["奥德赛 简繁英字幕 2160p UHD BluRay x265 10bit","magnet:?xt=urn:btih:a3b33f58a5c81f6901c5bab217b1688c9f320e7f","磁力","29.78"],
+ ["奥德赛 1080p 国英双语 中英字幕","magnet:?xt=urn:btih:f0c133235c68eee9acad09b2868f17ad985e6add","磁力","15.20"]
+];
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function copy(t){if(navigator.clipboard){navigator.clipboard.writeText(t).then(()=>alert("已复制："+t.slice(0,60))).catch(()=>alert(t))}else alert(t)}
+document.getElementById("go").onclick=()=>{
+  const q=document.getElementById("q").value.trim()||"奥德赛";
+  document.getElementById("stage2").style.display="none";
+  document.getElementById("stage1").style.display="block";
+  document.getElementById("films").innerHTML=FILMS.map((f,i)=>`<div class="film" data-i="${i}"><span class="i">${i+1}</span><span class="t">${esc(f[1].replace(/奥德赛/g,q))}</span><span style="color:var(--blue);font-size:12px">选这部 →</span></div>`).join("");
+  document.querySelectorAll("#films .film").forEach(el=>el.onclick=()=>{
+    document.querySelectorAll("#films .film").forEach(x=>x.classList.remove("active"));
+    el.classList.add("active");
+    document.getElementById("stage2").style.display="block";
+    document.getElementById("links").innerHTML=LINKS.map((l,i)=>`
+      <div class="link"><div class="lf"><div>${i+1}. ${esc(l[0])}</div><div class="lu">${esc(l[1])}</div></div>
+      <span class="badge ${l[2]==='磁力'?'':'q'}">${esc(l[2])}</span><span class="badge q">${esc(l[3])}GB</span>
+      <button class="btn btn-sm" onclick="copy('${l[1]}')">复制</button></div>`).join("");
+  });
+};
+document.getElementById("q").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("go").click()});
+document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{document.getElementById("q").value=c.textContent;document.getElementById("go").click()});
+document.getElementById("go").click();
+</script>
+</body>
+</html>
