@@ -3,6 +3,8 @@ const $ = (sel) => document.querySelector(sel);
 let films = [];
 let resources = [];
 let currentFilm = null;
+let navResults = null;      // 站点导航数据
+let navActiveCat = "magnet_search"; // 当前展示的分类
 
 function esc(s) {
   return String(s == null ? "" : s).replace(/[&<>"']/g, (c) =>
@@ -31,7 +33,10 @@ async function doSearch() {
   const btn = $("#searchBtn"); btn.disabled = true; btn.textContent = "搜索中…";
   $("#emptyState").style.display = "none";
   $("#resSection").style.display = "none";
+  $("#navSection").style.display = "none";
   $("#filmSection").style.display = "block";
+  // 并行加载站点导航（不影响主磁力搜索）
+  loadNav(q);
   $("#filmArea").innerHTML = `<div class="empty">正在搜索「${esc(q)}」的影片…</div>`;
   $("#filmCount").textContent = "";
   try {
@@ -94,6 +99,62 @@ function renderResources() {
         <button class="btn btn-sm btn-copy" data-copy="${encodeURIComponent(r.url)}">复制</button>
         <button class="btn btn-sm btn-open" data-open="${encodeURIComponent(r.url)}">打开 ↗</button>
       </div>
+    </div>`).join("");
+}
+
+// ===== 其他站点一键跳转 =====
+async function loadNav(q) {
+  try {
+    const data = await api("/api/search?q=" + encodeURIComponent(q));
+    navResults = data.results;
+    // 默认选第一个有结果的分类（优先磁力/BT）
+    const cats = ["magnet_search", "cloud_search", "online_video"];
+    navActiveCat = cats.find(c => navResults[c] && navResults[c].items.length) || cats[0];
+    renderNav();
+  } catch (e) {
+    $("#navArea").innerHTML = `<div class="empty">站点导航加载失败：${esc(e.message)}</div>`;
+    $("#navSection").style.display = "block";
+  }
+}
+
+function statusClass(s) {
+  if (s === "ok" || s === "accessible") return "st-ok";
+  if (s === "limited" || s === "restricted") return "st-warn";
+  if (s === "down" || s === "blocked") return "st-bad";
+  return "st-warn";
+}
+
+function renderNav() {
+  if (!navResults) return;
+  $("#navSection").style.display = "block";
+  const cats = [
+    ["magnet_search", "磁力 / BT"],
+    ["cloud_search", "网盘搜索"],
+    ["online_video", "在线影视"],
+  ].filter(([k]) => navResults[k] && navResults[k].items.length);
+
+  const total = cats.reduce((n, [k]) => n + navResults[k].items.length, 0);
+  $("#navCount").textContent = `(${total})`;
+
+  $("#navTabs").innerHTML = cats.map(([k, label]) =>
+    `<button class="nav-tab ${k === navActiveCat ? "active" : ""}" data-cat="${k}">${label} (${navResults[k].items.length})</button>`
+  ).join("");
+  $("#navTabs").querySelectorAll(".nav-tab").forEach(t => {
+    t.onclick = () => { navActiveCat = t.dataset.cat; renderNav(); };
+  });
+
+  const items = navResults[navActiveCat].items;
+  $("#navArea").innerHTML = items.map(s => `
+    <div class="nav-card">
+      <div class="nav-card-top">
+        <span class="nav-name" title="${esc(s.name)}">${esc(s.name)}</span>
+        <span class="nav-badges">
+          ${s.precise ? '<span class="precise-badge">直达搜索</span>' : '<span class="fallback-badge">兜底跳转</span>'}
+          <span class="st-badge ${statusClass(s.status)}">${esc(s.status_text || s.status)}</span>
+        </span>
+      </div>
+      <div class="nav-url">${esc(s.search_url)}</div>
+      <a class="nav-go" href="${esc(s.search_url)}" target="_blank" rel="noopener">带片名跳转 ↗</a>
     </div>`).join("");
 }
 
